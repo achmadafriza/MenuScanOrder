@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center mb-8">Edit Restaurant</h2>
+
+        <!--/*@thymesVar id="restaurantDto" type="net.uqcloud.infs7202.project.restaurant.controller.dto.RestaurantDTO"*/-->
+        <form th:action="@{/restaurant/edit/{id}(id = ${restaurant.getId()})}" th:object="${restaurantDto}" method="POST" enctype="multipart/form-data">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <div th:each="err : ${#fields.allErrors()}" role="alert" class="alert alert-error mt-4 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span th:text="${err}">Error! Task failed successfully.</span>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Restaurant Information</h3>
+            <div class="mb-4">
+                <label for="name" class="block mb-2 text-sm font-semibold text-gray-700">Name</label>
+                <input type="text" id="name" name="restaurant_name" th:field="*{restaurantName}" th:value="*{restaurantName}" maxlength="128" placeholder="Restaurant name" required class="input input-bordered w-full">
+            </div>
+
+            <div class="mb-4">
+                <label for="description" class="block mb-2 text-sm font-semibold text-gray-700">Description</label>
+                <textarea id="description" maxlength="512" name="restaurant_description" th:field="*{description}" th:value="*{description}" placeholder="Describe the restaurant" class="textarea textarea-bordered w-full"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="table_number" class="block mb-2 text-sm font-semibold text-gray-700">Number of Tables</label>
+                <input type="text" id="table_number" name="table_number" th:field="*{tableNumber}" th:value="*{tableNumber}" placeholder="Number of Tables" pattern="^[1-9]\d*$" required class="input input-bordered w-full">
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-semibold text-gray-700" for="profile_picture">Restaurant Picture</label>
+                <div class="flex justify-center items-center min-w-full">
+                    <label class="flex flex-col items-center justify-center min-w-full min-h-32 max-h-96 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg id="profile_picture_span" class="mb-3 w-10 h-10 text-gray-400" th:classappend="*{profilePictureUrl} ? hidden : notHidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <img id="profile_picture_file" th:src="*{profilePictureUrl}" class="mb-3 min-w-full min-h-16 max-h-80 rounded-lg border-2" th:classappend="*{profilePictureUrl} ? notHidden : hidden">
+                            <p class="mb-2 text-sm text-gray-500">
+                                <span id="profile_picture_name" th:text="*{profilePictureUrl} ? *{profilePictureName} : 'Select a photo'" class="text-center text-gray-500 text-sm">Select a photo</span>
+                            </p>
+                        </div>
+                        <input type="file" id="profile_picture" name="profile_picture" th:field="*{profilePicture}" class="hidden" onchange="updateFileName(this, 'profile_picture')"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-semibold text-gray-700" for="background_picture">Background Picture</label>
+                <div class="flex justify-center items-center min-w-full">
+                    <label class="flex flex-col items-center justify-center min-w-full min-h-32 max-h-96 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg id="background_picture_span" class="mb-3 w-10 h-10 text-gray-400" th:classappend="*{backgroundPictureUrl} ? hidden : notHidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <img id="background_picture_file" th:src="*{backgroundPictureUrl}" class="mb-3 min-w-full min-h-16 max-h-80 rounded-lg border-2" th:classappend="*{backgroundPictureUrl} ? notHidden : hidden">
+                            <p class="mb-2 text-sm text-gray-500">
+                                <span id="background_picture_name" th:text="*{backgroundPictureUrl} ? *{backgroundPictureName} : 'Select a photo'" class="text-center text-gray-500 text-sm">Select a photo</span>
+                            </p>
+                        </div>
+                        <input type="file" id="background_picture" name="background_picture" th:field="*{backgroundPicture}" class="hidden" onchange="updateFileName(this, 'background_picture')"/>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+    <script>
+        function updateFileName(inputElement, elementId) {
+            var fileName;
+            if (inputElement.files.length > 0) {
+                fileName = inputElement.files[0].name;
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(elementId.concat('_file')).src = e.target.result;
+                };
+
+                reader.readAsDataURL(inputElement.files[0]);
+
+                document.getElementById(elementId.concat('_file')).classList.remove("hidden")
+                document.getElementById(elementId.concat('_span')).classList.add("hidden")
+            } else {
+                fileName = "Select a photo"
+                document.getElementById(elementId.concat('_file')).classList.add("hidden")
+                document.getElementById(elementId.concat('_span')).classList.remove("hidden")
+            }
+
+            document.getElementById(elementId.concat('_name')).textContent = fileName;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+version: "3"
+services:
+  menu-scan-order:
+    build: .
+    container_name: menu-scan-order
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: 'menuscanorder'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+    ports:
+      - 8080:8080
+    volumes:
+      - ./logs:/home/logs
+  mysql:
+    image: mysql:8.0.25
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'menuscanorder'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - my-db:/var/lib/mysql

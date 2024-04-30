@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="container">
+        <div class="bg-white p-8 rounded-2xl shadow-xl mx-auto max-w-lg">
+            <!-- Dynamic error title using Thymeleaf to insert status and error -->
+            <h2 class="text-2xl font-bold text-center text-red-500" th:text="${status} + ' - ' + ${error}">500 - Internal Server Error</h2>
+            <p class="mt-4 text-center text-gray-800">Unfortunately, an unexpected error occurred. Please try again later.</p>
+
+            <!-- Server message dynamically inserted using Thymeleaf -->
+            <div th:if="${message}" class="mt-4 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
+                <p th:text="${message}">The server encountered an internal error and was unable to complete your request.</p>
+            </div>
+
+            <!-- Optional trace message, shown only if trace is not empty -->
+            <div class="mt-4 p-4 bg-gray-200 rounded-lg text-sm text-gray-600" th:if="${trace}">
+                <p th:text="${trace}">Details</p>
+            </div>
+
+            <div class="mt-6 text-center">
+                <a href="/" class="btn btn-primary">Go Home</a>
+                <a href="javascript:history.back()" class="btn btn-outline">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuScanOrder Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <nav class="navbar bg-white shadow-md">
+        <div class="container mx-auto px-5 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-900">MenuScanOrder</a>
+            <div class="flex items-center space-x-4">
+                <a th:href="@{/login}">
+                    <button class="btn btn-ghost">Login</button>
+                </a>
+                <a th:href="@{/signup}">
+                    <button class="btn btn-primary">Subscribe</button>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        <section class="hero bg-cover bg-center bg-no-repeat text-white" style="height: calc(100vh - 80px);background-image: url('https://via.placeholder.com/1920x1080');">
+            <div class="hero-content text-center flex justify-center items-center">
+                <div>
+                    <h1 class="text-5xl font-bold mb-5">Discover the Future of Dining</h1>
+                    <p class="mb-5">Digitize your menu, streamline ordering, and elevate the dining experience with MenuScanOrder.</p>
+                    <a th:href="@{/signup}">
+                        <button class="btn btn-accent">Get Started</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white py-12" id="features">
+            <div class="container mx-auto px-5">
+                <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Why MenuScanOrder?</h2>
+
+                <div class="flex flex-wrap items-center mb-8">
+                    <div class="md:w-1/4 p-4">
+                        <img src="https://via.placeholder.com/400" alt="Digital Menus" class="rounded-lg">
+                    </div>
+                    <div class="md:w-3/4 p-4">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-900">Effortless Digital Menus</h3>
+                        <p class="text-gray-900">
+                            Say goodbye to the hassle of printing and updating menus.
+                            With MenuScanOrder, creating a sleek, digital menu is as simple as pie.
+                            Add items, categories, and prices with a few clicks, and make instant updates anytime, anywhere.
+                            It's your menu, but smarter.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center mb-8">
+                    <div class="md:w-1/4 p-4 md:order-2">
+                        <img src="https://via.placeholder.com/400" alt="QR Code" class="rounded-lg">
+                    </div>
+                    <div class="md:w-3/4 p-4 md:order-1">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-900">Instant QR Code Access</h3>
+                        <p class="text-gray-900">
+                            Dive into the digital age with unique QR codes for each table.
+                            Guests can scan and access your menu in a flash, placing orders directly from their smartphones.
+                            It's convenience at their fingertips.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center mb-8">
+                    <div class="md:w-1/4 p-4">
+                        <img src="https://via.placeholder.com/400" alt="Order Management" class="rounded-lg">
+                    </div>
+                    <div class="md:w-3/4 p-4">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-900">Real-Time Order Management</h3>
+                        <p class="text-gray-900">
+                            Keep your kitchen in sync with the front of the house.
+                            View and manage orders as they come in, ensuring a smooth and efficient dining experience for your guests.
+                            With MenuScanOrder, every order is an opportunity to impress.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center">
+                    <div class="md:w-1/4 p-4 md:order-2">
+                        <img src="https://via.placeholder.com/400" alt="Seamless Integration" class="rounded-lg">
+                    </div>
+                    <div class="md:w-3/4 p-4 md:order-1">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-900">Seamless Integration</h3>
+                        <p class="text-gray-900">
+                            MenuScanOrder seamlessly blends into your existing operations,
+                            enhancing efficiency without the steep learning curve.
+                            It's technology that complements your service, not complicates it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 bg-gray-100">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Transform Your Dining Experience?</h2>
+                <p class="text-gray-900 mb-6">
+                    Welcome to the future of dining with MenuScanOrder, where every meal is an experience
+                    crafted with efficiency and elegance. Get ready to elevate your service, delight your guests,
+                    and streamline your operations, all with the click of a button. Join us on this digital journey
+                    and transform your restaurant into a modern culinary destination.
+                </p>
+                <button class="btn btn-primary">Join Now</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center py-4">
+        <p>&copy; 2024 MenuScanOrder. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+</body>
+</html>

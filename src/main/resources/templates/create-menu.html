@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Menu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center mb-8">Create Menu</h2>
+
+        <!--/*@thymesVar id="userDto" type="net.uqcloud.infs7202.project.auth.controller.dto.CreateUserDTO"*/-->
+        <form th:action="@{|/restaurant/${restaurant.getId()}/menu/add|}" th:object="${menuDto}" method="POST" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="category_id" class="block mb-2 text-sm font-semibold text-gray-700">Category</label>
+                <select id="category_id" name="category_id" th:field="*{categoryId}" class="select select-bordered w-full">
+                    <option disabled selected th:value="0">Select Category</option>
+                    <option th:each="category : ${categories}"
+                                th:value="${category.getId()}"
+                                th:text="${category.getName()}"></option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-semibold text-gray-700" for="menu_picture">Menu Picture</label>
+                <div class="flex justify-center items-center min-w-full">
+                    <label class="flex flex-col items-center justify-center min-w-full min-h-32 max-h-96 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg id="menu_picture_span" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <img id="menu_picture_file" class="mb-3 min-w-full min-h-16 max-h-80 rounded-lg border-2 hidden" src="#">
+                            <p class="mb-2 text-sm text-gray-500">
+                                <span id="menu_picture_name" class="text-center text-gray-500 text-sm">Select a photo</span>
+                            </p>
+                        </div>
+                        <input type="file" id="menu_picture" name="menu_picture" th:field="*{menuPicture}" class="hidden" onchange="updateFileName(this, 'menu_picture')"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="name" class="block mb-2 text-sm font-semibold text-gray-700">Name</label>
+                <input type="text" id="name" name="name" th:field="*{name}" placeholder="Menu item name" required class="input input-bordered w-full"/>
+            </div>
+
+            <div class="mb-4">
+                <label for="description" class="block mb-2 text-sm font-semibold text-gray-700">Description</label>
+                <textarea id="description" name="description" th:field="*{description}" placeholder="Menu item description" required class="textarea textarea-bordered w-full"></textarea>
+            </div>
+
+            <div class="mb-6">
+                <label for="menu_price" class="block mb-2 text-sm font-semibold text-gray-700">Price (AUD)</label>
+                <input type="text" id="menu_price" name="menu_price" th:field="*{price}" placeholder="0.00" required class="input input-bordered w-full" pattern="^\$?(\d+|\d{1,3}(,\d{3})*)(\.\d{1,2})?$" title="Price in AUD"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+    <script>
+        function updateFileName(inputElement, elementId) {
+            var fileName;
+            if (inputElement.files.length > 0) {
+                fileName = inputElement.files[0].name;
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(elementId.concat('_file')).src = e.target.result;
+                };
+
+                reader.readAsDataURL(inputElement.files[0]);
+
+                document.getElementById(elementId.concat('_file')).classList.remove("hidden")
+                document.getElementById(elementId.concat('_span')).classList.add("hidden")
+            } else {
+                fileName = "Select a photo"
+                document.getElementById(elementId.concat('_file')).classList.add("hidden")
+                document.getElementById(elementId.concat('_span')).classList.remove("hidden")
+            }
+
+            document.getElementById(elementId.concat('_name')).textContent = fileName;
+        }
+    </script>
+</body>
+</html>

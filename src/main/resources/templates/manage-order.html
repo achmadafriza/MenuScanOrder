@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css">
+</head>
+<body class="flex flex-col h-screen">
+    <nav class="navbar bg-white shadow-md">
+        <div class="container mx-auto px-5 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-900">MenuScanOrder</a>
+            <div class="flex items-center space-x-4">
+                <p>Hi, <span class="font-bold">User Owner</span></p>
+                <div class="dropdown dropdown-bottom">
+                    <div tabindex="0" role="button" class="btn btn-ghost">Dashboard Menus</div>
+                    <ul tabindex="0" class="dropdown-content z-[1] menu mt-6 p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a href="/restaurant/id/menu">Manage Menu</a></li>
+                        <li><a href="/restaurant/id/table">Manage Tables</a></li>
+                        <li><a href="/restaurant/id/order">Manage Orders</a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-accent">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow overflow-auto">
+        <div class="container mx-auto p-5">
+            <div class="flex justify-between items-center my-4">
+                <h1 class="text-3xl font-semibold">Manage Your Orders</h1>
+            </div>
+            <div class="overflow-x-auto overflow-y-hidden">
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Table Number</th>
+                            <th>Ordered At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">POSTED</span></td>
+                            <td>1</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>7/04/2024 13:00:01</td>
+                            <td>
+                                <button class="btn btn-ghost" onclick="toggleDetails('order-details-1')">Details</button>
+                                <button class="btn btn-info">Receive</button>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-error">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="order-details-1" class="hidden" colspan="5">
+                                <div tabindex="0" class="collapse collapse-open border">
+                                    <div class="collapse-title text-xl font-medium">
+                                        Order Summary
+                                    </div>
+                                    <div class="collapse-content">
+                                        <div class="overflow-x-auto overflow-y-hidden">
+                                            <table class="table w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Menu</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td><span id="summary_menu_1_name" class="font-bold">Not Borgor</span></td>
+                                                        <td>x <span id="summary_menu_1_quantity">1</span></td>
+                                                        <td><span id="summary_menu_1_price">$15.20</span></td>
+                                                        <td><span id="summary_menu_1_notes">No Pickle</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="font-bold">Total: </td>
+                                                        <td id="total_amount">$30.40</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center my-4">
+                <div class="join mt-4">
+                    <button class="join-item btn">«</button>
+                    <button class="join-item btn btn-active">1</button>
+                    <button class="join-item btn">2</button>
+                    <button class="join-item btn">3</button>
+                    <button class="join-item btn">4</button>
+                    <button class="join-item btn">»</button>
+                </div>
+
+                <select class="select select-bordered w-1/16 max-w-xs">
+                    <option disabled selected>Rows</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+    <script>
+        function toggleDetails(elementId) {
+            const details = document.getElementById(elementId);
+            if (details) {
+                details.classList.toggle('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
