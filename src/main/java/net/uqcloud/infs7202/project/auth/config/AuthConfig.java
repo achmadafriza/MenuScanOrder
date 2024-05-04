@@ -38,7 +38,8 @@ public class AuthConfig {
                                 "/error**",
                                 "/images/**",
                                 "/js/**",
-                                "/css/**").permitAll()
+                                "/css/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .formLogin((form) -> form

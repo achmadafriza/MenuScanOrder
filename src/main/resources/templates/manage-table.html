@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="autumn">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en" data-theme="autumn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User List</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="flex flex-col h-screen">
     <nav class="navbar bg-white shadow-md">
         <div class="container mx-auto px-5 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-gray-900">MenuScanOrder</a>
+            <a href="#" class="text-2xl font-bold text-gray-900">tablescanOrder</a>
             <div class="flex items-center space-x-4">
-                <p>Hi, <span class="font-bold">User Owner</span></p>
+                <p>Hi, <span class="font-bold">Owner <span th:text="${currentUser.getUsername()}">User</span></span></p>
                 <div class="dropdown dropdown-bottom">
-                    <div tabindex="0" role="button" class="btn btn-ghost">Dashboard Menus</div>
+                    <div tabindex="0" role="button" class="btn btn-ghost">Dashboard tables</div>
                     <ul tabindex="0" class="dropdown-content z-[1] menu mt-6 p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a href="/restaurant/id/menu">Manage Menu</a></li>
-                        <li><a href="/restaurant/id/table">Manage Tables</a></li>
-                        <li><a href="/restaurant/id/order">Manage Orders</a></li>
+                        <li><a th:href="@{/owner/menu}">Manage Menu</a></li>
+                        <li><a th:href="@{/owner/table}">Manage Tables</a></li>
+                        <li><a th:href="@{/owner/order}">Manage Orders</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-accent">Logout</button>
+                <a th:href="@{/logout}">
+                    <button class="btn btn-accent">Logout</button>
+                </a>
             </div>
         </div>
     </nav>
@@ -30,6 +33,33 @@
         <div class="container mx-auto p-5">
             <div class="flex justify-between items-center my-4">
                 <h1 class="text-3xl font-semibold">Manage Tables for Your Restaurant</h1>
+            </div>
+            <div class="flex justify-between items-center my-4">
+                <div th:with="page = ${tables.getPageable()}" class="join mt-4">
+                    <button th:if="${tables.isFirst()}" class="join-item btn btn-disabled">«</button>
+                    <a th:if="${!tables.isFirst()}" th:href="@{/owner/table(page=${1},size=${page.getPageSize()})}" class="join-item btn">«</a>
+                    <th:block th:each="num : ${#numbers.sequence(page.getPageNumber()-2, page.getPageNumber())}">
+                        <a th:if="${num >= 1}" class="join-item btn" th:href="@{/owner/table(page=${num},size=${page.getPageSize()})}" th:text="${num}">1</a>
+                    </th:block>
+                    <a class="join-item btn btn-active" th:href="@{/owner/table(page=${page.getPageNumber()+1},size=${page.getPageSize()})}" th:text="${page.getPageNumber()+1}">1</a>
+                    <th:block th:each="num : ${#numbers.sequence(page.getPageNumber()+2, page.getPageNumber()+4)}">
+                        <a th:if="${num <= tables.getTotalPages()}" class="join-item btn" th:href="@{/owner/table(page=${num},size=${page.getPageSize()})}" th:text="${num}">1</a>
+                    </th:block>
+                    <button th:if="${tables.isLast()}" class="join-item btn btn-disabled">»</button>
+                    <a th:if="${!tables.isLast()}" th:href="@{/owner/table(page=${tables.getTotalPages()},size=${page.getPageSize()})}" class="join-item btn">»</a>
+                </div>
+                <div class="text-right my-4">
+                    <select onchange="adjustPageSize(this)" class="select select-bordered w-1/16 max-w-xs text-right">
+                        <option disabled selected>Rows</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                    <button onclick="openModal('add-category')" class="btn btn-primary mx-2">Add Category</button>
+                    <a th:href="@{|/restaurant/${restaurant.getId()}/menu/add|}" class="btn btn-accent mx-2">Add Menu</a>
+                </div>
             </div>
             <div class="overflow-x-auto overflow-y-hidden">
                 <table class="table w-full">
@@ -42,48 +72,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr th:each="table : ${tables}">
                             <td>
                                 <div class="avatar">
                                     <div class="rounded w-48 h-48">
-                                        <img src="https://via.placeholder.com/200" alt="Avatar Tailwind CSS Component" />
+                                        <div th:id="'table-' + ${table.getKey().getTableNumber()}" th:src="@{|__${baseUrl}__/order/${table.getUuid()}|}" onload="genQRCode(this)"></div>
                                     </div>
                                 </div>
                             </td>
-                            <td><a class="link" href="/order/UUID">http://baseUrl/order/UUID</a></td>
-                            <td>1</td>
-                            <td>
-                                <button class="btn btn-sm btn-ghost">Download</button>
-                                <button class="btn btn-sm btn-ghost">Print</button>
-                                <button class="btn btn-sm btn-primary">Regenerate</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="avatar">
-                                    <div class="rounded w-48 h-48">
-                                        <img src="https://via.placeholder.com/200" alt="Avatar Tailwind CSS Component" />
-                                    </div>
-                                </div>
-                            </td>
-                            <td><a class="link" href="/order/UUID">http://baseUrl/order/UUID</a></td>
-                            <td>1</td>
-                            <td>
-                                <button class="btn btn-sm btn-ghost">Download</button>
-                                <button class="btn btn-sm btn-ghost">Print</button>
-                                <button class="btn btn-sm btn-primary">Regenerate</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="avatar">
-                                    <div class="rounded w-48 h-48">
-                                        <img src="https://via.placeholder.com/200" alt="Avatar Tailwind CSS Component" />
-                                    </div>
-                                </div>
-                            </td>
-                            <td><a class="link" href="/order/UUID">http://baseUrl/order/UUID</a></td>
-                            <td>1</td>
+                            <td><a class="link" th:href="@{|/order/${table.getUuid()}|}" th:text="'Table ' + ${table.getKey().getTableNumber()}">Table {id}</a></td>
+                            <td th:text="${table.getKey().getTableNumber()}">1</td>
                             <td>
                                 <button class="btn btn-sm btn-ghost">Download</button>
                                 <button class="btn btn-sm btn-ghost">Print</button>
@@ -93,29 +91,18 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="flex justify-between items-center my-4">
-                <div class="join mt-4">
-                    <button class="join-item btn">«</button>
-                    <button class="join-item btn btn-active">1</button>
-                    <button class="join-item btn">2</button>
-                    <button class="join-item btn">3</button>
-                    <button class="join-item btn">4</button>
-                    <button class="join-item btn">»</button>
-                </div>
-
-                <select class="select select-bordered w-1/16 max-w-xs">
-                    <option disabled selected>Rows</option>
-                    <option>5</option>
-                    <option>10</option>
-                    <option>20</option>
-                    <option>50</option>
-                    <option>100</option>
-                </select>
-            </div>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/daisyui"></script>
+    <script>
+        function adjustPageSize(element) {
+            document.location.href = '/owner/table?page=1&size=' + element.value;
+        }
+
+        function genQRCode(element) {
+            var qrCode = new QRCode(element.id, element.src);
+        }
+    </script>
 </body>
 </html>

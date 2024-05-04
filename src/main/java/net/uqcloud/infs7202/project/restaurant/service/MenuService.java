@@ -1,6 +1,7 @@
 package net.uqcloud.infs7202.project.restaurant.service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.uqcloud.infs7202.project.exception.DataNotFoundException;
@@ -49,21 +50,56 @@ public class MenuService {
         menu.setDescription(dto.getDescription());
 
         try {
-            if (dto.getMenuPicture() != null && !dto.getMenuPicture().isEmpty()) {
-                String pictureUrl = fileService.saveFile(dto.getMenuPicture());
-                menu.setMenuPic(pictureUrl);
-            }
-
             double price = CurrencyParser.parse(dto.getPrice(), Locale.US)
                     .setScale(2, RoundingMode.DOWN)
                     .doubleValue();
 
             menu.setPrice(price);
+
+            if (dto.getMenuPicture() != null && !dto.getMenuPicture().isEmpty()) {
+                String pictureUrl = fileService.saveFile(dto.getMenuPicture());
+                menu.setMenuPic(pictureUrl);
+            }
         } catch (IOException e) {
             throw new FileUploadException(e);
         } catch (ParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad currency format");
         }
+
+        return menuRepository.save(menu);
+    }
+
+    @Transactional
+    public MenuItem editMenu(int id, @Valid MenuDTO dto) {
+        MenuItem menu = menuRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Menu not found!"));
+
+        if (menu.getCategory().getId() != dto.getCategoryId()) {
+            Category category = categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new DataNotFoundException("Category not found!"));
+
+            menu.setCategory(category);
+        }
+
+        try {
+            double price = CurrencyParser.parse(dto.getPrice(), Locale.US)
+                    .setScale(2, RoundingMode.DOWN)
+                    .doubleValue();
+
+            menu.setPrice(price);
+
+            if (dto.getMenuPicture() != null && !dto.getMenuPicture().isEmpty()) {
+                String pictureUrl = fileService.saveFile(dto.getMenuPicture());
+                menu.setMenuPic(pictureUrl);
+            }
+        } catch (IOException e) {
+            throw new FileUploadException(e);
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad currency format");
+        }
+
+        menu.setName(dto.getName());
+        menu.setDescription(dto.getDescription());
 
         return menuRepository.save(menu);
     }

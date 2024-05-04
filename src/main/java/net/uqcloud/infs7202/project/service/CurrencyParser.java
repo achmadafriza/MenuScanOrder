@@ -8,12 +8,17 @@ import java.util.Locale;
 
 public class CurrencyParser {
     public static BigDecimal parse(final String amount, final Locale locale) throws ParseException {
-        final NumberFormat format = NumberFormat.getNumberInstance(locale);
-        if (format instanceof DecimalFormat decimalFormat) {
+        final NumberFormat formatter = NumberFormat.getNumberInstance(locale);
+        if (formatter instanceof DecimalFormat decimalFormat) {
             decimalFormat.setParseBigDecimal(true);
         }
 
-        return (BigDecimal) format.parse(amount.replaceAll("[^\\d.,]",""));
+        return (BigDecimal) formatter.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
+    public static String toCurrency(final double amount, final Locale locale) {
+        final NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
+
+        return formatter.format(amount);
+    }
 }

@@ -9,7 +9,9 @@ import net.uqcloud.infs7202.project.auth.repository.model.AuthUser;
 import net.uqcloud.infs7202.project.auth.repository.model.Menu;
 import net.uqcloud.infs7202.project.exception.DataNotFoundException;
 import net.uqcloud.infs7202.project.restaurant.repository.MenuItemRepository;
+import net.uqcloud.infs7202.project.restaurant.repository.RestaurantTableRepository;
 import net.uqcloud.infs7202.project.restaurant.repository.model.MenuItem;
+import net.uqcloud.infs7202.project.restaurant.repository.model.RestaurantTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class OwnerController {
     private @NonNull UserRepository userRepository;
 
     private @NonNull MenuItemRepository menuRepository;
+    private @NonNull RestaurantTableRepository tableRepository;
 
     @GetMapping("/menu")
     @PreAuthorize("hasAuthority('MANAGE_MENU')")
@@ -80,7 +84,46 @@ public class OwnerController {
     /* TODO: update page */
     @GetMapping("/table")
     @PreAuthorize("hasAuthority('MANAGE_TABLE')")
-    public String manageTable() {
+    public String manageTable(HttpServletRequest request,
+                              Model model,
+                              @RequestParam(required = false, defaultValue = "1") int page,
+                              @RequestParam(required = false, defaultValue = "25") int size,
+                              @AuthenticationPrincipal UserDetails user) {
+        model.addAttribute("currentUser", user);
+
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        model.addAttribute("baseUrl", baseUrl);
+
+        if (page < 1) {
+            return String.format("redirect:/owner/table?page=1&size=%d", size);
+        }
+
+        AuthUser authUser = userRepository.findByEmailAndIsActiveTrue(user.getUsername());
+        if (authUser.getRestaurant() == null) {
+            throw new DataNotFoundException("User doesn't have a restaurant!");
+        }
+
+        Pageable pageable = PageRequest.of(
+                page-1, size,
+                Sort.by("key.tableNumber").ascending()
+        );
+        Page<RestaurantTable> tables = tableRepository.findAllByRestaurantAndIsActiveTrue(authUser.getRestaurant(), pageable);
+
+        if (tables.getTotalPages() != 0 && page > tables.getTotalPages()) {
+            return String.format("redirect:/owner/table?page=%d&size=%d", tables.getTotalPages(), size);
+        }
+
+        model.addAttribute("tables", tables);
+        model.addAttribute("restaurant", authUser.getRestaurant());
+
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        String message = null;
+        if (inputFlashMap != null) {
+            message = (String) inputFlashMap.getOrDefault("message", null);
+        }
+
+        model.addAttribute("message", message);
+
         return "manage-table";
     }
 

@@ -36,12 +36,16 @@ public class RestaurantController {
         dto.setBackgroundPictureUrl(restaurant.getBackgroundPic());
 
         if (restaurant.getProfilePic() != null) {
-            String profilePictureName = restaurant.getProfilePic().substring(restaurant.getProfilePic().lastIndexOf('/') + 1);
+            String profileUrl = restaurant.getProfilePic();
+
+            String profilePictureName = profileUrl.substring(profileUrl.lastIndexOf('/') + 1);
             dto.setProfilePictureName(profilePictureName);
         }
 
         if (restaurant.getBackgroundPic() != null) {
-            String backgroundPictureName = restaurant.getBackgroundPic().substring(restaurant.getBackgroundPic().lastIndexOf('/') + 1);
+            String backgroundUrl = restaurant.getBackgroundPic();
+
+            String backgroundPictureName = backgroundUrl.substring(backgroundUrl.lastIndexOf('/') + 1);
             dto.setBackgroundPictureName(backgroundPictureName);
         }
 

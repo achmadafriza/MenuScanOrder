@@ -42,17 +42,20 @@ public class AuthController {
     }
 
     @GetMapping("/redirect")
-    public ModelAndView redirect(HttpServletRequest request) {
+    public String redirect(HttpServletRequest request) {
         if (request.isUserInRole("ROLE_ADMIN")) {
-            return new ModelAndView("redirect:/admin");
+            return "redirect:/admin";
         } else if (request.isUserInRole("ROLE_OWNER")) {
-            return new ModelAndView("redirect:/owner/menu");
+            return "redirect:/owner/menu";
+        } else if (request.isUserInRole("ROLE_STAFF")) {
+            return "redirect:/owner/order";
         }
 
-        return new ModelAndView("redirect:/error", "message", "Unknown Role for the User");
+        throw new UnsupportedOperationException("Unknown Role for the User");
     }
 
     @GetMapping("/signup")
+    @PreAuthorize("permitAll()")
     public ModelAndView signup() {
         return new ModelAndView("signup", "userDto", new SignupUserDTO());
     }

@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,6 +50,8 @@ public class UserController {
     @PostMapping(value = "/add", consumes = { "multipart/form-data" })
     @PreAuthorize("hasAuthority('ADD_USER')")
     public String addUser(@Valid @ModelAttribute("userDto") CreateUserDTO userDto,
+                          @ModelAttribute("roles") ArrayList<Role> roles,
+                          @ModelAttribute("restaurants") ArrayList<Restaurant> restaurants,
                           BindingResult bindingResult,
                           RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
