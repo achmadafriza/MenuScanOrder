@@ -40,7 +40,6 @@ public class CreateUserDTO {
     @JsonProperty("background_picture")
     private MultipartFile backgroundPicture;
 
-    @NotNull
     @Positive
     @JsonProperty("restaurant_id")
     private Integer restaurantId;

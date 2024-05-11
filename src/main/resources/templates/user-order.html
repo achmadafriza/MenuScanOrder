@@ -52,8 +52,8 @@
             <div class="container mx-auto p-4">
                 <h1 th:text="${category.getName()}" class="text-3xl font-semibold mb-6">Category</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div th:each="menu : ${menus}" class="card card-side w-full bg-base-100 shadow-xl relative">
-                        <figure class="w-5/6 lg:w-1/3 xl:w-1/2">
+                    <div th:each="menu : ${menus}" class="card card-normal lg:card-side w-full bg-base-100 shadow-xl relative">
+                        <figure class="lg:w-1/3 xl:w-1/2">
                             <img th:if="${menu.getMenuPic() == null}" src="https://via.placeholder.com/800"
                                  th:alt="${menu.getName()}"/>
                             <img th:if="${menu.getMenuPic() != null}"
@@ -62,7 +62,7 @@
                         </figure>
 
                         <div class="card-body flex-grow">
-                            <div class="h-fit mb-12 lg:mb-0">
+                            <div class="h-fit">
                                 <h2 th:text="${menu.getName()}" class="card-title mt-4">Menu Name</h2>
                                 <p th:text="${menu.getDescription()}" class="text-sm mt-4">Description</p>
                                 <p th:text="${#numbers.formatCurrency(menu.getPrice())}" class="text-lg mt-6 font-bold">$9.99</p>
@@ -84,8 +84,8 @@
                                        class="hidden" type="number">
                             </div>
                         </div>
-                        <div class="card-actions absolute bottom-0 right-0 justify-center w-auto m-4">
-                            <div class="flex lg:justify-end justify-center w-full">
+                        <div class="card-actions lg:absolute lg:bottom-0 lg:right-0 justify-center lg:w-auto m-4">
+                            <div class="flex justify-center lg:justify-end w-full">
                                 <button type="button" class="btn btn-ghost" th:onclick="'decrement(' + ${menu.getId()} + ')'">
                                     <svg class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>minus-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,13H17V11H7" /></svg>
                                 </button>
@@ -125,8 +125,7 @@
         <div class="container mt-8 mb-4 p-4">
             <h3 class="text-xl font-semibold">Order Summary</h3>
             <div class="mt-4">
-                <label for="table_number" class="font-semibold">Table Number: #1</label>
-                <input type="number" id="table_number" placeholder="Enter your table number" value="1" class="hidden" />
+                <p class="font-semibold">Table Number: #<span th:text="${table.getKey().getTableNumber()}"></span></p>
             </div>
             <div class="overflow-x-auto overflow-y-hidden mt-6">
                 <table class="table w-full">

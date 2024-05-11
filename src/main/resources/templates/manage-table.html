@@ -13,13 +13,13 @@
         <div class="container mx-auto px-5 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-gray-900">tablescanOrder</a>
             <div class="flex items-center space-x-4">
-                <p>Hi, <span class="font-bold">Owner <span th:text="${currentUser.getUsername()}">User</span></span></p>
+                <p>Hi, <span class="font-bold"><span th:text="${currentUser.getUsername()}">User</span></span></p>
                 <div class="dropdown dropdown-bottom">
-                    <div tabindex="0" role="button" class="btn btn-ghost">Dashboard tables</div>
+                    <div tabindex="0" role="button" class="btn btn-ghost">Dashboard Tables</div>
                     <ul tabindex="0" class="dropdown-content z-[1] menu mt-6 p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a th:href="@{/owner/menu}">Manage Menu</a></li>
-                        <li><a th:href="@{/owner/table}">Manage Tables</a></li>
-                        <li><a th:href="@{/owner/order}">Manage Orders</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_MENU')"><a th:href="@{/owner/menu}">Manage Menu</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_TABLE')"><a th:href="@{/owner/table}">Manage Tables</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_ORDER')"><a th:href="@{/owner/order}">Manage Orders</a></li>
                     </ul>
                 </div>
                 <a th:href="@{/logout}">
@@ -57,8 +57,6 @@
                         <option>50</option>
                         <option>100</option>
                     </select>
-                    <button onclick="openModal('add-category')" class="btn btn-primary mx-2">Add Category</button>
-                    <a th:href="@{|/restaurant/${restaurant.getId()}/menu/add|}" class="btn btn-accent mx-2">Add Menu</a>
                 </div>
             </div>
             <div th:if="${message}">

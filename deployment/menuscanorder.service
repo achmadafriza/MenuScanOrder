@@ -1,0 +1,24 @@
+[Unit]
+Description=MenuScanOrder s4728788 Service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=s4728788
+WorkingDirectory=/var/www/app
+ExecStart=/usr/lib/jvm/java-21-openjdk-amd64/bin/java -jar /var/www/app/app.jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+Environment="MYSQL_HOST=localhost"
+Environment="MYSQL_PORT=3306"
+Environment="MYSQL_DATABASE=menuscanorder"
+Environment="MYSQL_USER=root"
+Environment="MYSQL_PASSWORD=f12d3b4d929db888d2874f4b"
+Environment="STATIC_FILE_STORE_URL=https://infs3202-c5f09018.uqcloud.net/img"
+Environment="STATIC_FILE_STORE_DIR=/var/www/html/img"
+StandardOutput=journal
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

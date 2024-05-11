@@ -25,13 +25,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
+@PreAuthorize("permitAll()")
 @RequiredArgsConstructor
 @Log4j2
 public class OrderController {
@@ -63,11 +61,7 @@ public class OrderController {
             categorizedMenu.get(menuItem.getCategory()).add(menuItem);
         }
 
-        for (Map.Entry<Category, List<MenuItem>> entry : categorizedMenu.entrySet()) {
-            if (entry.getValue().isEmpty()) {
-                categorizedMenu.remove(entry.getKey());
-            }
-        }
+        categorizedMenu.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
         model.addAttribute("table", table);
         model.addAttribute("restaurant", restaurant);
@@ -105,7 +99,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/{id}/status")
-    @PreAuthorize("hasAuthority('MANAGE_ORDER')")
+    @PreAuthorize("isAuthenticated() && hasAuthority('MANAGE_ORDER')")
     public String adjustStatus(@PathVariable("id") int orderId,
                                @RequestParam("status") String status,
                                @AuthenticationPrincipal UserDetails user,

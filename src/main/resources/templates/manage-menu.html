@@ -12,13 +12,13 @@
         <div class="container mx-auto px-5 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-gray-900">MenuScanOrder</a>
             <div class="flex items-center space-x-4">
-                <p>Hi, <span class="font-bold">Owner <span th:text="${currentUser.getUsername()}">User</span></span></p>
+                <p>Hi, <span class="font-bold"><span th:text="${currentUser.getUsername()}">User</span></span></p>
                 <div class="dropdown dropdown-bottom">
                     <div tabindex="0" role="button" class="btn btn-ghost">Dashboard Menus</div>
                     <ul tabindex="0" class="dropdown-content z-[1] menu mt-6 p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a th:href="@{/owner/menu}">Manage Menu</a></li>
-                        <li><a th:href="@{/owner/table}">Manage Tables</a></li>
-                        <li><a th:href="@{/owner/order}">Manage Orders</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_MENU')"><a th:href="@{/owner/menu}">Manage Menu</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_TABLE')"><a th:href="@{/owner/table}">Manage Tables</a></li>
+                        <li sec:authorize="hasAuthority('MANAGE_ORDER')"><a th:href="@{/owner/order}">Manage Orders</a></li>
                     </ul>
                 </div>
                 <a th:href="@{/logout}">
@@ -110,7 +110,7 @@
                                                 <input type="hidden" name="id" th:value="${menu.getId()}">
                                                 <button type="submit" th:onclick="'closeModal(' + ${menu.getId()} + ')'" class="btn btn-primary">Delete</button>
                                             </form>
-                                            <button th:onclick="'closeModal(' + ${menu.getId()} + ')'" class="btn btn-ghost">Cancel</button>
+                                            <button type="button" th:onclick="'closeModal(' + ${menu.getId()} + ')'" class="btn btn-ghost">Cancel</button>
                                         </div>
                                     </div>
                                 </div>

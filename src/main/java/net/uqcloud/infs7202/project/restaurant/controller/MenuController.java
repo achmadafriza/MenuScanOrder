@@ -54,7 +54,7 @@ public class MenuController {
     @PreAuthorize("hasAuthority('ADD_MENU')")
     public String addMenu(@PathVariable("restaurantId") int restaurantId,
                           @ModelAttribute("restaurant") Restaurant restaurant,
-                          @ModelAttribute("categories") List<Category> categories,
+                          @ModelAttribute("categories") ArrayList<Category> categories,
                           @Valid @ModelAttribute("menuDto") MenuDTO menuDto,
                           BindingResult bindingResult,
                           RedirectAttributes redirectAttributes) {

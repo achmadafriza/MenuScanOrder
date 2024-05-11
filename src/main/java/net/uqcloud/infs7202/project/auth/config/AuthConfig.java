@@ -32,6 +32,7 @@ public class AuthConfig {
                                 "/signup**",
                                 "/login**",
                                 "/error**",
+                                "/order/**",
                                 "/images/**",
                                 "/js/**",
                                 "/css/**"

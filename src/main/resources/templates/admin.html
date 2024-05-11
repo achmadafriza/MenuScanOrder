@@ -12,7 +12,7 @@
         <div class="container mx-auto px-5 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-gray-900">MenuScanOrder</a>
             <div class="flex items-center space-x-4">
-                <p>Hi, <span class="font-bold">Admin <span th:text="${currentUser.getUsername()}">User</span></span></p>
+                <p>Hi, <span class="font-bold"><span th:text="${currentUser.getUsername()}">User</span></span></p>
                 <a th:href="@{/logout}">
                     <button class="btn btn-accent">Logout</button>
                 </a>
@@ -94,7 +94,10 @@
                                     <div tabindex="0" role="button" class="btn btn-sm btn-ghost">Edit</div>
                                     <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                         <li sec:authorize="hasAuthority('EDIT_USER')"><a th:href="@{|/user/${user.getId()}/edit|}">User</a></li>
-                                        <li th:if="${user.getRestaurant() != null}" sec:authorize="hasAuthority('EDIT_RESTAURANT')"><a th:href="@{|/restaurant/${user.getRestaurant().getId()}/edit|}">Restaurant</a></li>
+                                        <li th:if="${user.getRestaurant() != null}"
+                                            sec:authorize="hasAuthority('EDIT_RESTAURANT')">
+                                            <a th:href="@{|/restaurant/${user.getRestaurant().getId()}/edit|}">Restaurant</a>
+                                        </li>
                                     </ul>
                                 </div>
 
