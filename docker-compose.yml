@@ -10,10 +10,12 @@ services:
       MYSQL_DATABASE: 'menuscanorder'
       MYSQL_USER: 'admin'
       MYSQL_PASSWORD: 'admin'
+      STATIC_FILE_STORE_URL: 'http://localhost:8080'
+      STATIC_FILE_STORE_DIR: '/root/app/img'
     ports:
       - 8080:8080
     volumes:
-      - ./logs:/home/logs
+      - ./img:/root/app/img
   mysql:
     image: mysql:8.0.25
     container_name: mysql
