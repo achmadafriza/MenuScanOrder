@@ -11,13 +11,18 @@ import net.uqcloud.infs7202.project.auth.repository.UserRepository;
 import net.uqcloud.infs7202.project.auth.repository.model.AuthUser;
 import net.uqcloud.infs7202.project.auth.repository.model.Role;
 import net.uqcloud.infs7202.project.auth.service.UserService;
+import net.uqcloud.infs7202.project.exception.DataNotFoundException;
 import net.uqcloud.infs7202.project.restaurant.repository.RestaurantRepository;
 import net.uqcloud.infs7202.project.restaurant.repository.model.Restaurant;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -99,7 +104,13 @@ public class UserController {
     @PostMapping("/deactivate")
     @PreAuthorize("hasAuthority('DELETE_USER')")
     public String deactivateUser(@RequestParam("id") int id,
+                                 @AuthenticationPrincipal UserDetails user,
                                  RedirectAttributes redirectAttributes) {
+        AuthUser loggedInUser = userRepository.findByEmailAndIsActiveTrue(user.getUsername());
+        if (loggedInUser.getId() == id) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User cannot deactivate their own account!");
+        }
+
         service.updateUserActive(id, false);
 
         redirectAttributes.addFlashAttribute("message", "User has been deactivated!");
