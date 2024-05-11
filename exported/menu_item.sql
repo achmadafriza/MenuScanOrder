@@ -1,4 +1,0 @@
-insert into infs7202.menu_item (id, restaurant_id, category_id, name, description, price, menu_pic, created_at, updated_at)
-values  (1, 1, 1, 'Borgor 1', 'mmm so nice', 10, 'file:///C:/Programming/INFS7202/project/img/static/images_mb10HXBE.jpg', '2024-04-28 22:24:57', '2024-04-28 22:24:57'),
-        (2, 1, 1, 'Borgor 2', 'so nice', 10.99, 'file:///C:/Programming/INFS7202/project/img/static/images_TMSbQ5jG.jpg', '2024-04-28 22:29:03', '2024-04-28 22:29:03'),
-        (3, 1, 1, 'Borgor 3', 'mmmmm', 10.9, 'file:///C:/Programming/INFS7202/project/img/static/images_KFbKcud6.jpg', '2024-04-28 22:29:26', '2024-04-28 22:29:26');
