@@ -9,8 +9,10 @@ import net.uqcloud.infs7202.project.auth.repository.model.AuthUser;
 import net.uqcloud.infs7202.project.auth.repository.model.Menu;
 import net.uqcloud.infs7202.project.exception.DataNotFoundException;
 import net.uqcloud.infs7202.project.restaurant.repository.MenuItemRepository;
+import net.uqcloud.infs7202.project.restaurant.repository.OrderRepository;
 import net.uqcloud.infs7202.project.restaurant.repository.RestaurantTableRepository;
 import net.uqcloud.infs7202.project.restaurant.repository.model.MenuItem;
+import net.uqcloud.infs7202.project.restaurant.repository.model.Order;
 import net.uqcloud.infs7202.project.restaurant.repository.model.RestaurantTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +39,7 @@ public class OwnerController {
 
     private @NonNull MenuItemRepository menuRepository;
     private @NonNull RestaurantTableRepository tableRepository;
+    private @NonNull OrderRepository orderRepository;
 
     @GetMapping("/menu")
     @PreAuthorize("hasAuthority('MANAGE_MENU')")
@@ -52,7 +55,7 @@ public class OwnerController {
         }
 
         AuthUser authUser = userRepository.findByEmailAndIsActiveTrue(user.getUsername());
-        if (authUser.getRestaurant() == null) {
+        if (authUser.getRestaurant() == null || !authUser.getRestaurant().isActive()) {
             throw new DataNotFoundException("User doesn't have a restaurant!");
         }
 
@@ -99,7 +102,7 @@ public class OwnerController {
         }
 
         AuthUser authUser = userRepository.findByEmailAndIsActiveTrue(user.getUsername());
-        if (authUser.getRestaurant() == null) {
+        if (authUser.getRestaurant() == null || !authUser.getRestaurant().isActive()) {
             throw new DataNotFoundException("User doesn't have a restaurant!");
         }
 
@@ -127,10 +130,48 @@ public class OwnerController {
         return "manage-table";
     }
 
-    /* TODO: update page */
     @GetMapping("/order")
     @PreAuthorize("hasAuthority('MANAGE_ORDER')")
-    public String manageOrder() {
+    public String manageOrder(HttpServletRequest request,
+                              Model model,
+                              @RequestParam(required = false, defaultValue = "1") int page,
+                              @RequestParam(required = false, defaultValue = "25") int size,
+                              @AuthenticationPrincipal UserDetails user) {
+        model.addAttribute("currentUser", user);
+
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        model.addAttribute("baseUrl", baseUrl);
+
+        if (page < 1) {
+            return String.format("redirect:/owner/order?page=1&size=%d", size);
+        }
+
+        AuthUser authUser = userRepository.findByEmailAndIsActiveTrue(user.getUsername());
+        if (authUser.getRestaurant() == null || !authUser.getRestaurant().isActive()) {
+            throw new DataNotFoundException("User doesn't have a restaurant!");
+        }
+
+        Pageable pageable = PageRequest.of(
+                page-1, size,
+                Sort.by("orderedAt").descending()
+        );
+        Page<Order> orders = orderRepository.findAllByTable_Key_Restaurant(authUser.getRestaurant(), pageable);
+
+        if (orders.getTotalPages() != 0 && page > orders.getTotalPages()) {
+            return String.format("redirect:/owner/order?page=%d&size=%d", orders.getTotalPages(), size);
+        }
+
+        model.addAttribute("orders", orders);
+        model.addAttribute("restaurant", authUser.getRestaurant());
+
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        String message = null;
+        if (inputFlashMap != null) {
+            message = (String) inputFlashMap.getOrDefault("message", null);
+        }
+
+        model.addAttribute("message", message);
+
         return "manage-order";
     }
 }

@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -38,8 +40,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status = Status.POSTED;
 
-    @OneToMany
-    @JoinColumn(name = "order_id")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderItem> orderItems;
 
     @CreatedDate
@@ -49,4 +50,12 @@ public class Order {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @LastModifiedBy
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Formula("(select sum(i.price * i.quantity) from order_menu_item i where i.order_id = id)")
+    @Basic(fetch = FetchType.LAZY)
+    private double totalAmount;
 }

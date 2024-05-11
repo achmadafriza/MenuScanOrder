@@ -120,4 +120,17 @@ public class RestaurantService {
 
         return restaurant;
     }
+
+    @Transactional
+    public RestaurantTable regenerateTable(int restaurantId, String oldUUID) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new DataNotFoundException("Restaurant not found!"));
+
+        RestaurantTable table = tableRepository.findByKey_RestaurantAndUuid(restaurant, oldUUID)
+                .orElseThrow(() -> new DataNotFoundException("Table not found!"));
+
+        table.setUuid(sequenceGenerator.nextId());
+
+        return tableRepository.save(table);
+    }
 }

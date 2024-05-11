@@ -61,6 +61,12 @@
                     <a th:href="@{|/restaurant/${restaurant.getId()}/menu/add|}" class="btn btn-accent mx-2">Add Menu</a>
                 </div>
             </div>
+            <div th:if="${message}">
+                <div class="alert alert-info mt-4 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span th:text="${message}">Error! Task failed successfully.</span>
+                </div>
+            </div>
             <div class="overflow-x-auto overflow-y-hidden">
                 <table class="table w-full">
                     <thead>
@@ -76,16 +82,36 @@
                             <td>
                                 <div class="avatar">
                                     <div class="rounded w-48 h-48">
-                                        <div th:id="'table-' + ${table.getKey().getTableNumber()}" th:src="@{|__${baseUrl}__/order/${table.getUuid()}|}" onload="genQRCode(this)"></div>
+                                        <th:block th:with="url = ${baseUrl + '/order/' + table.getUuid()}">
+                                            <div th:id="'table-' + ${table.getKey().getTableNumber()}" class="qrcode">
+                                                <span th:id="'table-' + ${table.getKey().getTableNumber()} + '-url'" class="hidden" th:text="${url}"></span>
+                                            </div>
+                                        </th:block>
                                     </div>
                                 </div>
                             </td>
                             <td><a class="link" th:href="@{|/order/${table.getUuid()}|}" th:text="'Table ' + ${table.getKey().getTableNumber()}">Table {id}</a></td>
                             <td th:text="${table.getKey().getTableNumber()}">1</td>
                             <td>
-                                <button class="btn btn-sm btn-ghost">Download</button>
-                                <button class="btn btn-sm btn-ghost">Print</button>
-                                <button class="btn btn-sm btn-primary">Regenerate</button>
+                                <a th:id="'table-' + ${table.getKey().getTableNumber()} + '-download'" class="hidden" th:attr="download=${'table-' + table.getKey().getTableNumber() + '.png'}" href="#">
+                                    <button class="btn btn-sm btn-ghost">
+                                        Download
+                                    </button>
+                                </a>
+                                <button sec:authorize="hasAuthority('MANAGE_TABLE')" class="btn btn-sm btn-primary" th:onclick="'openModal(' + ${table.getKey().getTableNumber()} + ')'">Regenerate</button>
+                                <div th:id="'confirmation-modal-' + ${table.getKey().getTableNumber()}" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-box relative" role="document">
+                                        <h3 class="font-bold text-lg">Are you sure you want to regenerate the table?</h3>
+                                        <div class="modal-action">
+                                            <form th:action="@{|/restaurant/${restaurant.getId()}/table/regenerate|}" method="post">
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                                <input type="hidden" name="uuid" th:value="${table.getUuid()}">
+                                                <button type="submit" th:onclick="'closeModal(' + ${table.getKey().getTableNumber()} + ')'" class="btn btn-primary">Regenerate</button>
+                                            </form>
+                                            <button th:onclick="'closeModal(' + ${table.getKey().getTableNumber()} + ')'" class="btn btn-ghost">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -100,9 +126,46 @@
             document.location.href = '/owner/table?page=1&size=' + element.value;
         }
 
-        function genQRCode(element) {
-            var qrCode = new QRCode(element.id, element.src);
+        function openModal(id) {
+            document.getElementById('confirmation-modal-' + id).classList.add('modal-open');
         }
+
+        function closeModal(id) {
+            document.getElementById('confirmation-modal-' + id).classList.remove('modal-open');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var qrCodes = document.querySelectorAll('.qrcode');
+
+            function createQRCode(element) {
+                var urlElement = document.getElementById(element.id + '-url');
+
+                var qrcode = new QRCode(element.id, {
+                    text: urlElement.textContent,
+                    width: 128,
+                    height: 128,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                qrcode.makeCode(urlElement.textContent);
+
+                setTimeout(() => {
+                    var tableId = '#' + element.id
+                    let qelem = document.querySelector(tableId +' img')
+                    let dlink = document.querySelector(tableId + '-download')
+                    let qr = qelem.getAttribute('src');
+
+                    dlink.setAttribute('href', qr);
+                    dlink.classList.remove('hidden');
+                  }, 500);
+            }
+
+            qrCodes.forEach(qrcode => {
+                createQRCode(qrcode);
+            });
+        });
     </script>
 </body>
 </html>

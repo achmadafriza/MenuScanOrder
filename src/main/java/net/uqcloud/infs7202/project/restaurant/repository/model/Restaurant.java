@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
@@ -18,6 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "restaurant")
 @SQLDelete(sql = "UPDATE restaurant SET is_active = false WHERE id = ?")
+@Filter(name = "RestaurantIsActive", condition = "is_active = 1")
 @Getter
 @Setter
 @ToString(of = "name")
@@ -49,6 +51,9 @@ public class Restaurant implements Serializable {
 
     @OneToMany(mappedBy = "restaurant")
     private List<Category> categories;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<MenuItem> menuItems;
 
     @OneToMany
     @JoinColumn(name = "restaurant_id")

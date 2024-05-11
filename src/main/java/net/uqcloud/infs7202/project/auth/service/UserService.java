@@ -107,12 +107,15 @@ public class UserService {
 
     @Transactional
     public AuthUser updateUserActive(int id, boolean isActive) {
-        if (!userRepository.existsById(id)) {
-            throw new DataNotFoundException("User not found!");
+        AuthUser user = userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("User not found!"));
+
+        if (user.getRestaurant() != null) {
+            restaurantRepository.setRestaurantActive(user.getRestaurant().getId(), isActive);
         }
 
         userRepository.setUserActive(id, isActive);
 
-        return userRepository.findById(id).orElseThrow();
+        return user;
     }
 }

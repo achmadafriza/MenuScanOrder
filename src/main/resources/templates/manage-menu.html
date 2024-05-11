@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User List</title>
+    <title>Manage Menus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css">
 </head>
@@ -99,7 +99,7 @@
                             <td th:text="${#temporals.format(menu.getCreatedAt(), 'dd-MM-yyyy HH:mm:ss')}">2021-01-01</td>
                             <td th:text="${#temporals.format(menu.getUpdatedAt(), 'dd-MM-yyyy HH:mm:ss')}">2021-01-02</td>
                             <td>
-                                <a sec:authorize="hasAuthority('EDIT_MENU')" th:href="@{|/restaurant/${restaurant.getId()}/menu/edit/${menu.getId()}|}" class="btn btn-sm btn-ghost">Edit</a>
+                                <a sec:authorize="hasAuthority('EDIT_MENU')" th:href="@{|/restaurant/${restaurant.getId()}/menu/${menu.getId()}/edit|}" class="btn btn-sm btn-ghost">Edit</a>
                                 <button sec:authorize="hasAuthority('DELETE_MENU')" class="btn btn-sm btn-ghost text-error" th:onclick="'openModal(' + ${menu.getId()} + ')'">Delete</button>
                                 <div th:id="'confirmation-modal-' + ${menu.getId()}" class="modal" tabindex="-1" role="dialog">
                                     <div class="modal-box relative" role="document">

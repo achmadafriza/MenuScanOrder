@@ -63,21 +63,21 @@ public class AdminController {
     @GetMapping("/archived")
     @PreAuthorize("hasAuthority('MANAGE_SUBSCRIPTION')")
     public String archivedPage(HttpServletRequest request,
-                            Model model,
-                            @RequestParam(required = false, defaultValue = "1") int page,
-                            @RequestParam(required = false, defaultValue = "25") int size,
-                            @AuthenticationPrincipal UserDetails user) {
+                               Model model,
+                               @RequestParam(required = false, defaultValue = "1") int page,
+                               @RequestParam(required = false, defaultValue = "25") int size,
+                               @AuthenticationPrincipal UserDetails user) {
         model.addAttribute("currentUser", user);
 
         if (page < 1) {
-            return String.format("redirect:/archived?page=1&size=%d", size);
+            return String.format("redirect:/admin/archived?page=1&size=%d", size);
         }
 
         Pageable pageable = PageRequest.of(page-1, size, Sort.by("email").ascending());
         Page<AuthUser> users = userRepository.findAllByIsActiveFalse(pageable);
 
-        if (page > users.getTotalPages()) {
-            return String.format("redirect:/archived?page=%d&size=%d", users.getTotalPages(), size);
+        if (users.getTotalPages() != 0 && page > users.getTotalPages()) {
+            return String.format("redirect:/admin/archived?page=%d&size=%d", users.getTotalPages(), size);
         }
 
         model.addAttribute("users", users);

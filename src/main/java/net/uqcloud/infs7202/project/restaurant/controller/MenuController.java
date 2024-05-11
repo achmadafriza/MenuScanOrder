@@ -68,7 +68,7 @@ public class MenuController {
         return "redirect:/owner/menu";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String editMenuForm(@PathVariable("restaurantId") int restaurantId,
                                @PathVariable("id") int menuId,
                                Model model) {
@@ -101,7 +101,7 @@ public class MenuController {
         return "edit-menu";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String editMenu(@PathVariable("restaurantId") int restaurantId,
                            @PathVariable("id") int menuId,
                            @ModelAttribute("restaurant") Restaurant restaurant,

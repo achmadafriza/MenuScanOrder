@@ -65,7 +65,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     @PreAuthorize("hasAuthority('EDIT_USER')")
     public String editUserForm(@PathVariable("id") int id,
                                Model model) {
@@ -79,7 +79,7 @@ public class UserController {
         return "edit-user";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     @PreAuthorize("hasAuthority('EDIT_USER')")
     public String editUser(@PathVariable("id") int id,
                            @ModelAttribute("user") AuthUser user,

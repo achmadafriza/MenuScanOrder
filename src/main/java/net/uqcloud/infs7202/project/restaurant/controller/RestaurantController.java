@@ -22,10 +22,11 @@ public class RestaurantController {
 
     private @NonNull RestaurantService restaurantService;
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String editRestaurantForm(@PathVariable("id") int id,
                                      Model model) {
-        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Restaurant doesn't exist"));
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Restaurant doesn't exist"));
         model.addAttribute("restaurant", restaurant);
 
         RestaurantDTO dto = new RestaurantDTO();
@@ -54,7 +55,7 @@ public class RestaurantController {
         return "edit-restaurant";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String editRestaurant(@PathVariable("id") int id,
                                  @ModelAttribute("restaurant") Restaurant restaurant,
                                  @Valid @ModelAttribute("restaurantDto") RestaurantDTO restaurantDto,
@@ -68,5 +69,15 @@ public class RestaurantController {
 
         redirectAttributes.addFlashAttribute("message", "Restaurant has been updated!");
         return "redirect:/admin";
+    }
+
+    @PostMapping("/{id}/table/regenerate")
+    public String regenerateTableUUID(@PathVariable("id") int id,
+                                      @RequestParam("uuid") String uuid,
+                                      RedirectAttributes redirectAttributes) {
+        restaurantService.regenerateTable(id, uuid);
+
+        redirectAttributes.addFlashAttribute("message", "Table has been regenerated!");
+        return "redirect:/owner/table";
     }
 }

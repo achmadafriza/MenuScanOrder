@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface RestaurantTableRepository extends JpaRepository<RestaurantTable, RestaurantTable.Key> {
     @Query("""
@@ -32,4 +34,7 @@ public interface RestaurantTableRepository extends JpaRepository<RestaurantTable
         where t.key.restaurant = ?1 and t.isActive = true
     """)
     Page<RestaurantTable> findAllByRestaurantAndIsActiveTrue(Restaurant restaurant, Pageable pageable);
+
+    Optional<RestaurantTable> findByKey_RestaurantAndUuid(Restaurant restaurant, String uuid);
+    Optional<RestaurantTable> findByUuid(String uuid);
 }

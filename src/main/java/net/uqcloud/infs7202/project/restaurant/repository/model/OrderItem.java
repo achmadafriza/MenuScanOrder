@@ -30,7 +30,7 @@ public class OrderItem {
 
     @Positive
     @Column(nullable = false)
-    private int price;
+    private double price;
 
     @Positive
     @Column(nullable = false)
