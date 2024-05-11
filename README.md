@@ -24,13 +24,14 @@ Afterwards, it has configurations to serve static content on `/var/www/html/img`
 `{baseUrl}/img`.
 
 3. Compile the fat Java JAR using `./gradlew clean bootJar`.
-4. Adjust `./deployment/application.properties` to point to the MySQL database and the base url for serving static content. 
-5. Copy the compiled JAR and `./deployment/application.properties` into `/var/www/app`
+4. Create a database inside a MySQL instance for the migration to point to.
+5. Adjust `./deployment/application.properties` to point to the MySQL database and the base url for serving static content. 
+6. Copy the compiled JAR and `./deployment/application.properties` into `/var/www/app`
 
 See `./deploy.sh` for the commands.
 
-6. Add `./deployment/menuscanorder.service` as a systemd service.
-7. Run the following commands:
+7. Add `./deployment/menuscanorder.service` as a systemd service.
+8. Run the following commands:
 
 ```bash
 sudo systemctl daemon-reload
@@ -40,7 +41,7 @@ sudo systemctl enable menuscanorder
 sudo systemctl reload nginx
 ```
 
-8. You can see the logs for the deployed app using `journalctl`.
+9. You can see the logs for the deployed app using `journalctl`.
 
 ```bash
 sudo journalctl -u menuscanorder # For complete log
